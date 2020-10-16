@@ -38,7 +38,6 @@
         methods:{
             //改变播放类型
             changeType() {
-                console.log(this.type);
                 if (this.type == 0) {
                     this.type = 1;
                     localStorage.setItem('type', '1');
@@ -78,7 +77,6 @@
             //切换歌曲
             changeMusic(){
                 //搜索的歌曲列表中点击播放，或者点击上一首/下一首，或者在播放列表中切换时触发
-                console.log('切换歌曲');
                 this.play_url = localStorage.getItem('play_url');
                 this.showLyric = this.audioName;
                 this.hackReset = false;

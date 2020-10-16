@@ -70,8 +70,6 @@
                 _this.$http.get(_this.HTTP_URL + "user/getUserInfo", {
                     params:{token:token}
                 }).then(function (res) {
-                    console.log('登陆事件');
-                    console.log(res.data);
                     if (res.data.result.status === 0) {
                         _this.username = res.data.result.username;
                         _this.isLogin = 1;

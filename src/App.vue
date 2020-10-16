@@ -55,7 +55,6 @@
     methods:{
       childFun: function($event) {
         let _this = this;
-        console.log($event)
         if ($event === 'login') {
           _this.$refs.topNavBar.getIsLogin();
         } else if ($event === 'StopMusic') {

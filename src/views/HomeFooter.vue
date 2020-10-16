@@ -1,7 +1,7 @@
 <template>
     <div id="footer">
         <a-row>
-            <a-col :span="12">
+            <a-col :span="8">
                 <a-textarea v-model="comment" style="display: inline;" id="sendComment" placeholder="输入评论" :auto-size="{ minRows: 1, maxRows: 3 }" allow-clear />
                 <a-button style="display: inline" type="primary" @click="addComment">发送</a-button>
             </a-col>
@@ -88,7 +88,6 @@
                     }
                 } else if (res.action === 'addComment') {
                     if (res.status === 0) {
-                        console.log(res);
                         _this.$message.info("添加成功");
                         _this.getComment();
                     } else {
@@ -130,7 +129,7 @@
 
 <style>
     #sendComment {
-        width: 500px;
+        width: 80%;
     }
     .button {
         margin-left: 10px;

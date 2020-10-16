@@ -57,7 +57,7 @@ function sendSock(agentData, callback) {
 
 //数据接收
 function websocketonmessage(e) {
-   // e.data=="PONG" ? console.log(e.data,"获取数据1") : console.log(e.data,"获取数据2");
+    e.data=="PONG" ? console.log(e.data,"获取数据1") : console.log(JSON.parse(e.data),"获取数据2");
     if(e.data!="PONG" && typeof global_callback == "function") {
         let param = JSON.parse(e.data);
         global_callback(param);

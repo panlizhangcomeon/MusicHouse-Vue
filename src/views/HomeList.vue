@@ -99,7 +99,6 @@
                     params:{token:token}
                 }).then(function (res) {
                     if (res.data.result.status !== 0) {
-                        console.log('判断登陆状态===============');
                         _this.$message.warn('请先登录');
                         _this.$router.push({
                           path:'/login'
@@ -218,7 +217,6 @@
                 } else if (res.action === 'getRoomList') {
                     if (res.status === 0) {
                         _this.data = res.room_list;
-                        console.log(_this.data);
                     }
                 } else if (res.action === 'joinRoom') {
                     if (res.status === 0) {

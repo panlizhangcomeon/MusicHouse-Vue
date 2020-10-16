@@ -77,7 +77,6 @@
                 _this.$http.get(_this.HTTP_URL + "user/getOtherInfo", {
                     params:{username:username}
                 }).then(function (res) {
-                    console.log(res.data.result);
                     if (res.data.result.status === 0) {
                         _this.form = res.data.result;
                         _this.form.birthday = moment(_this.form.birthday, 'YYYY/MM/DD')

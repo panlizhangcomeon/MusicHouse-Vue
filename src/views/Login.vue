@@ -55,7 +55,6 @@
                         _this.$http.get(_this.HTTP_URL + 'user/login', {
                             params:{username:this.form.name, password:this.form.password}
                         }).then(function (res) {
-                            console.log(res.data);
                             let result = res.data.result;
                             if (result.status === 0) {
                                 _this.$message.info('登陆成功');

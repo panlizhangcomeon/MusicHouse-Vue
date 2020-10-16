@@ -120,7 +120,6 @@
                                 birthday:_this.form.birthday.format("YYYY-MM-DD"), like_type:_this.form.type, sex:_this.form.sex, desc:_this.form.desc
                             }
                         }).then(function (res) {
-                            console.log(res.data);
                             if (res.data.result.status === 0) {
                                 _this.$message.info('注册成功');
                             } else {

@@ -29,7 +29,6 @@
             };
         },
         created() {
-            console.log(this.HTTP_URL);
             let _this = this;
             //设置延迟500ms后执行
             setTimeout(function () {

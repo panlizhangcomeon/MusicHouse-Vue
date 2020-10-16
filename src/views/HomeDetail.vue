@@ -62,7 +62,6 @@
             //切换评论和歌曲列表时执行
             changeItem($event) {
                 let _this = this;
-                console.log('event=' + $event);
                 if ($event === 'Comment' || $event === 'PlayList') {
                     _this.show = $event;
                     this.contentReset = false;

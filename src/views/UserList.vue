@@ -9,7 +9,7 @@
                         <a slot="title" href="javascript:void 0" @click="getOtherInfo(item.username)">{{ item.username }}</a>
                         <a-avatar
                                 slot="avatar"
-                                :src="this.HTTP_URL + `user/img?imgPath=` + item.avatar"
+                                :src="http_url + `user/img?imgPath=` + item.avatar"
                         />
                     </a-list-item-meta>
                 </a-list-item>
@@ -24,10 +24,12 @@
         name: 'UserList',
         data() {
             return {
-                data: []
+                data: [],
+                http_url:this.HTTP_URL
             };
         },
         created() {
+            console.log(this.HTTP_URL);
             let _this = this;
             //设置延迟500ms后执行
             setTimeout(function () {

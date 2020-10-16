@@ -53,7 +53,7 @@
             //获取歌曲详情
             getMusic(hash) {
                 let _this = this;
-                _this.$http.get('http://10.100.50.130:9501/music/getMusic', {
+                _this.$http.get(_this.HTTP_URL + 'music/getMusic', {
                     params:{hash:hash}
                 }).then(function (res) {
                     let resData = res.data.result;

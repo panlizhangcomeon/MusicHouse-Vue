@@ -49,7 +49,7 @@
                 let _this = this;
                 let roomid = localStorage.getItem('roomid');
                 let username = localStorage.getItem('username');
-                _this.$http.get("http://10.100.50.130:9501/user/logout", {
+                _this.$http.get(_this.HTTP_URL + "user/logout", {
                     params:{roomid:roomid, username:username}
                 }).then(function (res) {
                     if (res.data.result.status === 0) {
@@ -67,7 +67,7 @@
             getIsLogin : function () {
                 let _this = this;
                 let token = localStorage.getItem('token');
-                _this.$http.get("http://10.100.50.130:9501/user/getUserInfo", {
+                _this.$http.get(_this.HTTP_URL + "user/getUserInfo", {
                     params:{token:token}
                 }).then(function (res) {
                     console.log('登陆事件');
@@ -76,7 +76,7 @@
                         _this.username = res.data.result.username;
                         _this.isLogin = 1;
                         if (res.data.result.avatar !== '') {
-                            _this.avatar = 'http://10.100.50.130:9501/user/img?imgPath=' + res.data.result.avatar;
+                            _this.avatar = _this.HTTP_URL + 'user/img?imgPath=' + res.data.result.avatar;
                         }
                     }
                 }).catch(function (error) {

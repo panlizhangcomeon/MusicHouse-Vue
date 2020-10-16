@@ -52,7 +52,7 @@
                 let _this = this;
                 _this.$refs.ruleForm.validate(valid => {
                     if (valid) {
-                        _this.$http.get('http://10.100.50.130:9501/user/login', {
+                        _this.$http.get(_this.HTTP_URL + 'user/login', {
                             params:{username:this.form.name, password:this.form.password}
                         }).then(function (res) {
                             console.log(res.data);
@@ -61,7 +61,7 @@
                                 _this.$message.info('登陆成功');
                                 //登陆成功，localstorage存放token
                                 localStorage.setItem('token', result.token);
-                                localStorage.setItem('avatar', 'http://10.100.50.130:9501/user/img?imgPath=' + result.userInfo[0]['avatar']);
+                                localStorage.setItem('avatar', _this.HTTP_URL + 'user/img?imgPath=' + result.userInfo[0]['avatar']);
                                 localStorage.setItem('userInfo', JSON.stringify(result.userInfo));
                                 localStorage.setItem('username', result.userInfo[0]['username']);
                                 _this.$router.push({

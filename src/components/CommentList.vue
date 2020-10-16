@@ -75,7 +75,7 @@
                             arr[i] = {
                                 id:commentList[i]['id'],
                                 author:commentList[i]['creator'],
-                                avatar:'http://10.100.50.130:9501/user/img?imgPath=' + commentList[i]['avatar'],
+                                avatar:_this.HTTP_URL + 'user/img?imgPath=' + commentList[i]['avatar'],
                                 content:commentList[i]['comment'],
                                 datetime:moment(commentList[i]['create_time'], "YYYY-MM-DD HH:mm:ss"),
                             };

@@ -71,7 +71,7 @@
         methods:{
             onSearch() {
                 let _this = this;
-                this.$http.get('http://10.100.50.130:9501/music/getMusicList', {
+                this.$http.get(_this.HTTP_URL + 'music/getMusicList', {
                     params:{keyword:this.search}
                 }).then(function (res) {
                     _this.musicList = res.data.result;

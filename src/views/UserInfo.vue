@@ -17,7 +17,7 @@
                         list-type="picture-card"
                         class="avatar-uploader"
                         :show-upload-list="false"
-                        action="http://10.100.50.130:9501/user/uploadAvatar"
+                        :action="this.HTTP_URL + `user/uploadAvatar`"
                         :before-upload="beforeUpload"
                         @change="handleChange"
                 >
@@ -140,7 +140,7 @@
                 let _this = this;
                 _this.$refs.ruleForm.validate(valid => {
                     if (valid) {
-                        _this.$http.get("http://10.100.50.130:9501/user/changeUserInfo", {
+                        _this.$http.get(_this.HTTP_URL + "user/changeUserInfo", {
                             params:{
                                 username:_this.form.username,
                                 avatar:_this.trueImgUrl,
@@ -149,7 +149,7 @@
                         }).then(function (res) {
                             if (res.data.result.status === 0) {
                                 if (_this.trueImgUrl !== '') {
-                                    localStorage.setItem('avatar', 'http://10.100.50.130:9501/user/img?imgPath=' + _this.trueImgUrl);
+                                    localStorage.setItem('avatar', _this.HTTP_URL + 'user/img?imgPath=' + _this.trueImgUrl);
                                 }
                                 localStorage.setItem('token', res.data.result.token); //更新token
                                 _this.$message.info('修改成功');
@@ -174,7 +174,7 @@
             getUserInfo() {
                 let _this = this;
                 let token = localStorage.getItem('token');
-                _this.$http.get("http://10.100.50.130:9501/user/getUserInfo", {
+                _this.$http.get(_this.HTTP_URL + "user/getUserInfo", {
                     params:{token:token}
                 }).then(function (res) {
                     console.log(res.data.result);

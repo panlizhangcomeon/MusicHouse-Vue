@@ -74,7 +74,7 @@
             getOtherInfo() {
                 let _this = this;
                 let username = _this.$route.query.username;
-                _this.$http.get("http://10.100.50.130:9501/user/getOtherInfo", {
+                _this.$http.get(_this.HTTP_URL + "user/getOtherInfo", {
                     params:{username:username}
                 }).then(function (res) {
                     console.log(res.data.result);

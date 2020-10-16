@@ -114,7 +114,7 @@
                 let _this = this;
                 _this.$refs.ruleForm.validate(valid => {
                     if (valid) {
-                        _this.$http.get('http://10.100.50.130:9501/user/register', {
+                        _this.$http.get(_this.HTTP_URL + 'user/register', {
                             params:{
                                 username:_this.form.name, password:_this.form.password, area:_this.form.region,
                                 birthday:_this.form.birthday.format("YYYY-MM-DD"), like_type:_this.form.type, sex:_this.form.sex, desc:_this.form.desc

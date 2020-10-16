@@ -9,7 +9,7 @@
                         <a slot="title" href="javascript:void 0" @click="getOtherInfo(item.username)">{{ item.username }}</a>
                         <a-avatar
                                 slot="avatar"
-                                :src="`http://10.100.50.130:9501/user/img?imgPath=` + item.avatar"
+                                :src="this.HTTP_URL + `user/img?imgPath=` + item.avatar"
                         />
                     </a-list-item-meta>
                 </a-list-item>

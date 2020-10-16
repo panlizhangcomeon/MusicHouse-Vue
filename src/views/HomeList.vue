@@ -95,7 +95,7 @@
             getIsLogin : function () {
                 let _this = this;
                 let token = localStorage.getItem('token');
-                _this.$http.get("http://10.100.50.130:9501/user/getUserInfo", {
+                _this.$http.get(_this.HTTP_URL + "user/getUserInfo", {
                     params:{token:token}
                 }).then(function (res) {
                     if (res.data.result.status !== 0) {

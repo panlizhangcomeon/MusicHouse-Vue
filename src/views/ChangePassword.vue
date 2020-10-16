@@ -64,7 +64,7 @@
                 _this.$refs.ruleForm.validate(valid => {
                     if (valid) {
                         let username = localStorage.getItem('username');
-                        _this.$http.get('http://10.100.50.130:9501/user/changePassWd', {
+                        _this.$http.get(_this.HTTP_URL + 'user/changePassWd', {
                             params:{username:username, oldpassword:_this.form.oldPassword, newpassword:_this.form.password}
                         }).then(function (res) {
                             if (res.data.result.status === 0) {

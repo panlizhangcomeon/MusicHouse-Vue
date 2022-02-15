@@ -79,10 +79,27 @@
                     _this.$message.error(error);
                 })
             },
+            //播放选中的音乐
+            playChooseMusic(record) {
+                let _this = this;
+                _this.$emit('parentFun', record);
+            },
             //播放音乐
             play(record) {
                 let _this = this;
-                _this.$emit('parentFun', record)
+                let roomid = localStorage.getItem('roomid');
+                let token = localStorage.getItem('token');
+                let actions = {
+                    "controller":"RoomController",
+                    "action":"chooseMusic",
+                    "params":{
+                        "roomid":roomid,
+                        "hash":record.hash,
+                        'album_id':record.album_id,
+                        "token":token
+                    }
+                };
+                socket.sendSock(actions, _this.getResult);
             },
             //添加到播放列表
             addMusicList(record) {
@@ -107,7 +124,9 @@
             getResult(res) {
                 let _this = this;
                 let username = localStorage.getItem('username');
-                if (res.action === 'addRoomMusicList') {
+                if (res.action === 'getNextMusic') {
+                    _this.playChooseMusic(res);
+                } else if (res.action === 'addRoomMusicList') {
                     if (res.status === 0) {
                         _this.$message.info('添加成功');
                     } else {

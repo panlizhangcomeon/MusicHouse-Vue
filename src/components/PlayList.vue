@@ -60,10 +60,26 @@
                 };
                 socket.sendSock(actions, _this.getResult);
             },
+            playChooseMusic(record) {
+                let _this = this;
+                _this.$emit('parentFun2', record);
+            },
             //播放音乐
             play(record) {
                 let _this = this;
-                _this.$emit('parentFun2', record)
+                let roomid = localStorage.getItem('roomid');
+                let token = localStorage.getItem('token');
+                let actions = {
+                    "controller":"RoomController",
+                    "action":"chooseMusic",
+                    "params":{
+                        "roomid":roomid,
+                        "hash":record.hash,
+                        'album_id':record.album_id,
+                        "token":token
+                    }
+                };
+                socket.sendSock(actions, _this.getResult);
             },
             //删除播放列表
             deleteMusicList(hash, songname) {
@@ -85,7 +101,9 @@
             getResult(res) {
                 let _this = this;
                 let username = localStorage.getItem('username');
-                if (res.action === 'getRoomMusicList') {
+                if (res.action === 'getNextMusic') {
+                    _this.playChooseMusic(res);
+                } else if (res.action === 'getRoomMusicList') {
                     if (res.status === 0) {
                         _this.musicList = res.data;
                     } else {

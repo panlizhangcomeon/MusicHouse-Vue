@@ -1,6 +1,6 @@
 var websock = null;
 var global_callback = null;
-var WEBSOCKET_URL = "ws://192.168.10.18:9501";
+var WEBSOCKET_URL = "ws://172.17.20.88:9501";
 
 //socket心跳连接相关
 var global_lockReconnect = false;//是否真正建立连接

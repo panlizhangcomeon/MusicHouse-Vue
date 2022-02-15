@@ -12,9 +12,18 @@
             <a-icon type="reload"  @click="changeType" v-if="type == 2" :style="{ fontSize: '20px',color:'white',position:'relative',bottom:'16px',marginRight:'10px' }"/>
         </a-tooltip>
         <a-icon type="step-backward" :style="{ fontSize: '20px',color:'white',position:'relative',bottom:'16px' }" @click="prevMusic"/>
+
+        <a-tooltip title="暂停">
+            <a-icon type="pause"  @click="changePlayType" v-if="play_type == 1" :style="{ fontSize: '20px',color:'white',position:'relative',bottom:'16px',margin:'auto' }" />
+        </a-tooltip>
+        <a-tooltip title="播放">
+            <a-icon type="caret-right"  @click="changePlayType" v-if="play_type == 2" :style="{ fontSize: '20px',color:'white',position:'relative',bottom:'16px',margin:'auto' }"/>
+        </a-tooltip>
+
         <a-icon type="step-forward" :style="{ fontSize: '20px',color:'white',position:'relative',bottom:'16px',marginRight:'10px' }" @click="endMusic"/>
-        <audio  controls autoplay preload  name="media" style="text-align: center" v-if="hackReset" id="videoPlayer"
-               @pause="pauseMusic" @ended="endMusic" @timeupdate="timeupdate" @play="playMusic()">
+
+        <audio controls autoplay preload  name="media" style="text-align: center" v-if="hackReset" id="videoPlayer"
+               @pause="pause" @ended="endMusic" @timeupdate="timeupdate" @play="play">
             <source :src="play_url" type="audio/mpeg">
         </audio >
     </div>
@@ -32,10 +41,44 @@
                 audioName:'',
                 lyricArr:'',
                 showLyric:'',
-                type:localStorage.getItem('type')
+                type:localStorage.getItem('type'),
+                isPlaying:false,
+                play_type:localStorage.getItem('play_type')
             }
         },
         methods:{
+            //点击播放或暂停
+            changePlayType() {
+                let _this = this;
+                let action;
+                if (_this.play_type == 1) {
+                    //当前为播放状态，点击暂停
+                    _this.play_type = 2;
+                    localStorage.setItem('play_type', '2');
+                    console.log('点击暂停');
+                    action = 'pauseMusic';
+                    _this.bePaused();
+                } else {
+                    //当前为暂停状态，点击播放
+                    _this.play_type = 1;
+                    localStorage.setItem('play_type', '1');
+                    console.log('点击播放');
+                    action = 'playMusic';
+                    _this.bePlayed();
+                }
+                let roomid = localStorage.getItem('roomid');
+                let token = localStorage.getItem('token');
+                let actions = {
+                    "controller":"RoomController",
+                    "action":"changePlayType",
+                    "params":{
+                        "roomid":roomid,
+                        "token":token,
+                        "action":action
+                    }
+                };
+                socket.sendSock(actions, _this.getResult);
+            },
             //改变播放类型
             changeType() {
                 if (this.type == 0) {
@@ -90,15 +133,33 @@
                 this.showLyric = '';
                 this.changeMusic();
             },
+            play() {
+                console.log('继续播放');
+            },
             //播放事件，则通知房间内其他客户端播放
-            playMusic() {
-                // Media.play(); //播放
-                console.log('继续播放')
+            bePlayed() {
+                console.log('收到继续播放事件')
+                let audio = document.querySelector('#videoPlayer');
+                if (!this.isPlaying) {
+                    audio.play();
+                    this.isPlaying = true;
+                }
+                this.play_type = 1;
+                this.$forceUpdate();
             },
             //暂停事件，则通知房间内其他客户端暂停
-            pauseMusic() {
-                // Media.pause(); //暂停
-                console.log('暂停');
+            pause() {
+                console.log('暂停')
+            },
+            bePaused() {
+                console.log('收到暂停事件');
+                let audio = document.querySelector('#videoPlayer');
+                if (this.isPlaying) {
+                    audio.pause();
+                    this.isPlaying = false;
+                }
+                this.play_type = 2;
+                this.$forceUpdate();
             },
             //播放结束/点击下一首，则通知房间内其他客户端播放结束
             endMusic() {
@@ -164,44 +225,51 @@
                 // myVid.currentTime = 10; //设置播放时间
             },
             getResult(res) {
-                let _this = this;
-                let username = localStorage.getItem('username');
-                if (res.action === 'getNextMusic' || res.action === 'getPrevMusic') {
-                    if (res.status === 0) {
-                        localStorage.setItem('hash', res.hash);
-                        _this.getMusic(res.hash);
-                        _this.changeMusic();
-                    } else {
-                        _this.$message.error("播放下一首失败")
+                console.log('bottomBar get Result')
+                if (res !== undefined) {
+                    let _this = this;
+                    let username = localStorage.getItem('username');
+                    if (res.action === 'getNextMusic' || res.action === 'getPrevMusic') {
+                        if (res.status === 0) {
+                            localStorage.setItem('hash', res.hash);
+                            _this.getMusic(res.hash);
+                            //_this.changeMusic();
+                        } else {
+                            _this.$message.error("播放下一首失败")
+                        }
+                    } else if (res.action === 'pauseMusic') {
+                        _this.bePaused();
+                    } else if (res.action === 'playMusic') {
+                        _this.bePlayed();
+                    } else if (res.action === 'otherJoinRoom') {
+                        if (username !== res.username) {
+                            _this.$message.info('用户' + res.username + '加入房间');
+                        }
+                    } else if (res.action === 'otherQuitRoom') {
+                        if (username !== res.username) {
+                            _this.$message.info('用户' + res.username + '退出房间');
+                        }
+                    } else if (res.action === 'otherAddMusic') {
+                        if (username !== res.username) {
+                            _this.$message.info('用户' + res.username + '添加了新歌：' + res.songname);
+                        }
+                    } else if (res.action === 'otherDelMusic') {
+                        if (username !== res.username) {
+                            _this.$message.info('用户' + res.username + '删除了歌曲：' + res.songname);
+                        }
+                    } else if (res.action === 'otherAddComment') {
+                        if (username !== res.username) {
+                            _this.$message.info('用户' + res.username + '添加了一条评论');
+                        }
+                    } else if (res.action === 'otherDelComment') {
+                        if (username !== res.username) {
+                            _this.$message.info('用户' + res.username + '删除了一条评论');
+                        }
+                    } else if (res.action === 'updateToken') {
+                        localStorage.setItem('token', res.token);
+                    } else if (res.action === 'no login') {
+                        _this.logout();
                     }
-                } else if (res.action === 'otherJoinRoom') {
-                    if (username !== res.username) {
-                        _this.$message.info('用户' + res.username + '加入房间');
-                    }
-                } else if (res.action === 'otherQuitRoom') {
-                    if (username !== res.username) {
-                        _this.$message.info('用户' + res.username + '退出房间');
-                    }
-                } else if (res.action === 'otherAddMusic') {
-                    if (username !== res.username) {
-                        _this.$message.info('用户' + res.username + '添加了新歌：' + res.songname);
-                    }
-                } else if (res.action === 'otherDelMusic') {
-                    if (username !== res.username) {
-                        _this.$message.info('用户' + res.username + '删除了歌曲：' + res.songname);
-                    }
-                } else if (res.action === 'otherAddComment') {
-                    if (username !== res.username) {
-                        _this.$message.info('用户' + res.username + '添加了一条评论');
-                    }
-                } else if (res.action === 'otherDelComment') {
-                    if (username !== res.username) {
-                        _this.$message.info('用户' + res.username + '删除了一条评论');
-                    }
-                } else if (res.action === 'updateToken') {
-                    localStorage.setItem('token', res.token);
-                } else if (res.action === 'no login') {
-                    _this.logout();
                 }
             }
         },
@@ -210,6 +278,7 @@
         created() {
             socket.initWebSocket();
             localStorage.setItem('type', 0);
+            localStorage.setItem('play_type', 1);
             this.audioName = localStorage.getItem('audio_name');
             this.lyricArr = JSON.parse(localStorage.getItem('lyric'))
         }

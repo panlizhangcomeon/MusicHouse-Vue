@@ -61,7 +61,7 @@ Vue.use(Drawer);
 Vue.use(Upload);
 Vue.use(Breadcrumb);
 
-Vue.prototype.HTTP_URL = 'http://10.100.50.130:9501/';
+Vue.prototype.HTTP_URL = 'http://172.17.20.88:9501/';
 
 Vue.config.productionTip = false;
 Vue.prototype.$message = Message; //注入全局属性$message

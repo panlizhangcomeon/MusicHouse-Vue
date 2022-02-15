@@ -3,7 +3,7 @@
         <a-table :columns="columns" :data-source="musicList" :row-key="`hash`">
             <a slot="name" slot-scope="text">{{ text }}</a>
             <span slot="action" slot-scope="text, record">
-                <a href="javascript:void 0"><a-icon type="caret-right" @click="play(record.hash)"/></a>
+                <a href="javascript:void 0"><a-icon type="caret-right" @click="play(record)"/></a>
                 <a-divider type="vertical" />
                 <a href="javascript:void 0"><a-icon type="delete" @click="deleteMusicList(record.hash, record.songname)" /></a>
             </span>
@@ -61,9 +61,9 @@
                 socket.sendSock(actions, _this.getResult);
             },
             //播放音乐
-            play(hash) {
+            play(record) {
                 let _this = this;
-                _this.$emit('parentFun2', hash)
+                _this.$emit('parentFun2', record)
             },
             //删除播放列表
             deleteMusicList(hash, songname) {

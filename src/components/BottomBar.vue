@@ -1,28 +1,35 @@
 <template>
     <div id="bottom">
-        <span :style="{ fontSize: '20px',color:'#01E5FF',position:'relative',bottom:'16px',marginRight:'120px' }">{{ showLyric }}</span>
-        <span :style="{ fontSize: '20px',color:'white',position:'relative',bottom:'16px',marginRight:'60px' }">{{ audioName }}</span>
-        <a-tooltip title="随机播放">
-            <a-icon type="swap"  @click="changeType" v-if="type == 0" :style="{ fontSize: '20px',color:'white',position:'relative',bottom:'16px',marginRight:'10px' }"/>
-        </a-tooltip>
-        <a-tooltip title="循环播放">
-            <a-icon type="retweet"  @click="changeType" v-if="type == 1" :style="{ fontSize: '20px',color:'white',position:'relative',bottom:'16px',marginRight:'10px' }"/>
-        </a-tooltip>
-        <a-tooltip title="单曲循环">
-            <a-icon type="reload"  @click="changeType" v-if="type == 2" :style="{ fontSize: '20px',color:'white',position:'relative',bottom:'16px',marginRight:'10px' }"/>
-        </a-tooltip>
-        <a-icon type="step-backward" :style="{ fontSize: '20px',color:'white',position:'relative',bottom:'16px' }" @click="prevMusic"/>
+        <div>
+            <span :style="{ fontSize: '20px',color:'#01E5FF',marginLeft:'auto',marginTop:'auto' }">{{ showLyric }}</span>
+            <span :style="{ fontSize: '10px',color:'white',marginLeft: '20px' }">{{ audioName }}</span>
+        </div>
 
-        <a-tooltip title="暂停">
-            <a-icon type="pause"  @click="changePlayType" v-if="play_type == 1" :style="{ fontSize: '20px',color:'white',position:'relative',bottom:'16px',margin:'auto' }" />
-        </a-tooltip>
-        <a-tooltip title="播放">
-            <a-icon type="caret-right"  @click="changePlayType" v-if="play_type == 2" :style="{ fontSize: '20px',color:'white',position:'relative',bottom:'16px',margin:'auto' }"/>
-        </a-tooltip>
+        <div>
+            <a-tooltip title="随机播放">
+                <a-icon type="swap"  @click="changeType" v-if="type == 0" :style="{ fontSize: '15px',color:'white',margin:'auto' }"/>
+            </a-tooltip>
+            <a-tooltip title="循环播放">
+                <a-icon type="retweet"  @click="changeType" v-if="type == 1" :style="{ fontSize: '15px',color:'white',margin:'auto' }"/>
+            </a-tooltip>
+            <a-tooltip title="单曲循环">
+                <a-icon type="reload"  @click="changeType" v-if="type == 2" :style="{ fontSize: '15px',color:'white',margin:'auto' }"/>
+            </a-tooltip>
 
-        <a-icon type="step-forward" :style="{ fontSize: '20px',color:'white',position:'relative',bottom:'16px',marginRight:'10px' }" @click="endMusic"/>
+            <a-icon type="step-backward" :style="{ fontSize: '20px',color:'white',margin:'auto' }" @click="prevMusic"/>
 
-        <audio controls autoplay preload  name="media" style="text-align: center" v-if="hackReset" id="videoPlayer"
+            <a-tooltip title="暂停">
+                <a-icon type="pause"  @click="changePlayType" v-if="play_type == 1" :style="{ fontSize: '20px',color:'white',margin:'auto' }" />
+            </a-tooltip>
+            <a-tooltip title="播放">
+                <a-icon type="caret-right"  @click="changePlayType" v-if="play_type == 2" :style="{ fontSize: '20px',color:'white',margin:'auto' }"/>
+            </a-tooltip>
+
+            <a-icon type="step-forward" :style="{ fontSize: '20px',color:'white',margin:'auto' }" @click="endMusic"/>
+        </div>
+
+<!--        audio 去掉controls属性则不展示该控件-->
+        <audio autoplay preload  name="media" style="text-align: center" v-if="hackReset" id="videoPlayer"
                @pause="pause" @ended="endMusic" @timeupdate="timeupdate" @play="play">
             <source :src="play_url" type="audio/mpeg">
         </audio >
@@ -93,10 +100,11 @@
                 }
             },
             //获取歌曲详情
-            getMusic(hash) {
+            getMusic(record) {
+                console.log(record);
                 let _this = this;
                 _this.$http.get(_this.HTTP_URL + 'music/getMusic', {
-                    params:{hash:hash}
+                    params:{hash:record.hash, album_id:record.album_id}
                 }).then(function (res) {
                     let resData = res.data.result;
                     if (resData.status === 0) {
@@ -106,7 +114,7 @@
                             _this.lyricArr = resData.lyrics;
                             localStorage.setItem('audio_name', resData.audio_name);
                             localStorage.setItem('play_url', _this.play_url);
-                            localStorage.setItem('hash', hash);
+                            localStorage.setItem('hash', record.hash);
                             localStorage.setItem('lyric', JSON.stringify(_this.lyricArr));
                             _this.changeMusic(); //播放歌曲
                         } else {
@@ -232,7 +240,7 @@
                     if (res.action === 'getNextMusic' || res.action === 'getPrevMusic') {
                         if (res.status === 0) {
                             localStorage.setItem('hash', res.hash);
-                            _this.getMusic(res.hash);
+                            _this.getMusic(res);
                             //_this.changeMusic();
                         } else {
                             _this.$message.error("播放下一首失败")
@@ -308,8 +316,8 @@
         }
     }
     audio {
-        opacity:0.3;
-        width: 40%;
+        opacity: 0.3;
+        width: 50%;
         position: relative;
         top: 4px;
     }

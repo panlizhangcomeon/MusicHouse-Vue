@@ -10,7 +10,7 @@
             <a-table :columns="columns" :data-source="musicList" :row-key="`hash`">
                 <a slot="name" slot-scope="text">{{ text }}</a>
                 <span slot="action" slot-scope="text, record">
-                    <a href="javascript:void 0"><a-icon type="caret-right" @click="play(record.hash)"/></a>
+                    <a href="javascript:void 0"><a-icon type="caret-right" @click="play(record)"/></a>
                     <a-divider type="vertical" />
                     <a href="javascript:void 0"><a-icon type="plus" @click="addMusicList(record)" /></a>
                 </span>
@@ -80,9 +80,9 @@
                 })
             },
             //播放音乐
-            play(hash) {
+            play(record) {
                 let _this = this;
-                _this.$emit('parentFun', hash)
+                _this.$emit('parentFun', record)
             },
             //添加到播放列表
             addMusicList(record) {
@@ -98,6 +98,7 @@
                         "singername":record.singername,
                         "album":record.album_name,
                         "hash":record.hash,
+                        'album_id':record.album_id,
                         "token":token
                     }
                 };

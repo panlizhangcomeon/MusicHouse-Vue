@@ -233,7 +233,7 @@
                 // myVid.currentTime = 10; //设置播放时间
             },
             getResult(res) {
-                console.log('bottomBar get Result')
+                console.log('bottomBar get Result 1')
                 if (res !== undefined) {
                     let _this = this;
                     let username = localStorage.getItem('username');

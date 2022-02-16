@@ -99,8 +99,10 @@
                 socket.sendSock(actions, _this.getResult);
             },
             getResult(res) {
+                console.log('bottomBar get Result 3')
                 let _this = this;
                 let username = localStorage.getItem('username');
+                console.log(res)
                 if (res.action === 'getNextMusic') {
                     _this.playChooseMusic(res);
                 } else if (res.action === 'getRoomMusicList') {

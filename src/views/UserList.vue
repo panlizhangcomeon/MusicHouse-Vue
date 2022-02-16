@@ -50,9 +50,19 @@
                 socket.sendSock(action, _this.getResult)
             },
             getResult(res) {
+                console.log('bottomBar get Result 7');
                 let _this = this;
                 let username = localStorage.getItem('username');
-                if (res.action === 'getRoomUserList') {
+                if (res.action === 'getNextMusic' || res.action === 'getPrevMusic') {
+                    if (res.status === 0) {
+                        localStorage.setItem('hash', res.hash);
+                        _this.$emit('parentFun2', res);
+                    }
+                } else if (res.action === 'pauseMusic') {
+                    _this.$emit('parentFun2', 'pause');
+                } else if (res.action === 'playMusic') {
+                    _this.$emit('parentFun2', 'play');
+                } else if (res.action === 'getRoomUserList') {
                     if (res.status === 0) {
                         _this.data = res.userlist;
                     } else {

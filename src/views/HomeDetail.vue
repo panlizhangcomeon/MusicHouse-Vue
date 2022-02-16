@@ -50,6 +50,7 @@
         methods:{
             //监听子组件
             listenChild($event) {
+                console.log('收到event' + $event)
                 let _this = this;
                 if ($event === 'getPlayList') {
                     _this.$refs.playList.getRoomMusicList();

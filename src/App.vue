@@ -53,12 +53,17 @@
       TopNavBar, MyHomeList, HomeList, Register, Login, ChangePassword, UserInfo, HomeDetail, BottomBar, MusicList, OtherInfo
     },
     methods:{
+      //监听子组件
       childFun: function($event) {
         let _this = this;
         if ($event === 'login') {
           _this.$refs.topNavBar.getIsLogin();
         } else if ($event === 'StopMusic') {
           _this.$refs.child.stopMusic();
+        } else if ($event === 'play') {
+          _this.$refs.child.bePlayed();
+        } else if ($event === 'pause') {
+          _this.$refs.child.bePaused();
         } else {
           _this.$refs.child.getMusic($event);
         }

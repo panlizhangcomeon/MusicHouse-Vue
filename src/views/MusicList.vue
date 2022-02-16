@@ -122,6 +122,7 @@
                 socket.sendSock(actions, _this.getResult);
             },
             getResult(res) {
+                console.log('bottomBar get Result 6')
                 let _this = this;
                 let username = localStorage.getItem('username');
                 if (res.action === 'getNextMusic') {

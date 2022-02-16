@@ -204,6 +204,7 @@
                 this.visible = false;
             },
             getResult(res) {
+                console.log('bottomBar get Result 5')
                 let _this = this;
                 let username = localStorage.getItem('username');
                 if (res.action === 'addRoom') {

@@ -68,6 +68,7 @@
                 _this.$emit("parentFun3", "PlayList")
             },
             getResult(res) {
+                console.log('bottomBar get Result 4')
                 let _this = this;
                 let username = localStorage.getItem('username');
                 if (res.action === 'quitRoom') {
